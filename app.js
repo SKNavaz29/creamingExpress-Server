@@ -3,9 +3,31 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
+
+
+var passport = require('passport');
+var authenticate = require('./authenticate'); 
+var config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var itemRouter = require('./routes/itemRouter');
+
+const mongoose = require('mongoose');
+
+const Items = require('./models/items');
+
+
+const url = config.mongoUrl;
+const connect = mongoose.connect(url);
+
+
+connect.then((db) => {
+  console.log("Connected correctly to server");
+}, (err) => { console.log(err); });
+
 
 var app = express();
 
